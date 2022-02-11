@@ -1,0 +1,102 @@
+##machine learning with python##
+##KNN-Clustering##
+from sklearn import datasetname
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.('ggplot')
+#the iris dataset in this course#
+iris=datasets.load_iris()
+type(iris)
+#data.shape:sample in row,features in column
+X=iris.data
+Y=iris.target
+df=pd.DataFrame(X,columns=iris.feature_names)
+#visual our dataset:
+_=pd.plotting.scatter_matrix(df,c=y,figsize=[8,8],s=150,marker='D') #c is the target variable of color;figsize:declare the size of the figure,
+#as well as a marker size and shape-->then, the result is the matrix of figure,corresponding to the row and column.
+
+##The Challenge of Classification##
+#KNN:K-Nearest Nighbors#--predict the label of any data point by looking at K.Using the scatter point;create a set of decision boundries 
+#通俗来讲，划分区域，然后通过区域来判断categories
+#training the model for data is to fitting a model to data,store the imforation learned from data-- using .fit() method to do this
+#To predict the labels of new data: .predict() method
+
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier(n_neighbors=6)
+
+#then,we fit the data#
+knn.fit(iris['data'],iris['target']) #the features and targets are NumPy Array.   
+knn.fit(X,y) #the simple format
+#the first you should tell it is a NumPy Array or Pandas DataFrame
+#the features(column) take on the continuous values
+#requires the no missing values in the data
+
+#Predicting the unlabel data#
+X_new=np.array([5.6,2.8,3.9,1.1]
+                [5.7,2.6,3.8,1.3]
+                [4.7,3.2,1.3,0.2])
+prediction=knn.predict(X_new)
+X_new.shape #check the shape
+#show the prediction:
+print('Prediction:{}'.format(prediction)) 
+
+#For example:
+# Import KNeighborsClassifier from sklearn.neighbors
+from sklearn.neighbors import KNeighborsClassifier 
+
+# Create arrays for the features and the response variable
+y = df['party'].values
+X = df.drop('party', axis=1).values
+
+# Create a k-NN classifier with 6 neighbors: knn
+knn = KNeighborsClassifier(n_neighbors=6)
+
+# Fit the classifier to the data
+knn.fit(X, y)
+
+# Predict the labels for the training data X: y_pred
+y_pred = knn.predict(X)
+
+# Predict and print the label for the new data point X_new
+new_prediction = knn.predict(X_new)
+print("Prediction: {}".format(new_prediction)) 
+
+#Measuring model performance:
+#Accuracy=Fraction of correct predictions; split the data into 2 sets:training and testing set:Fit-->Train;Prediction based on test set
+from sklearn.model_selection import train_test_split #import the package
+X_train,X_test,y_train,y_test=      #use the train test split function to randomly split your data
+train_test_split(X,y,test_size=0.3,   #X: the first argument is the feature data, y:the second argument is targets or labels
+                 random_state=21,stratify=y)  #test_size is the proportion of original data is used for the dataset
+#random_state set a seed for random number generator that splits the data into train and test,the seed will later allow you to reproduce the exact split and the result
+#it will finally return four arrays as the declaration
+##By default, train test split splits data into 75% training data and 25% test data##
+#but here, we set the test data is 30% of total data
+knn = KNeighborsClassifier(n_neighbors=8) #fit to the training data
+knn.fit(X_train,y_train)
+y_pred=knn.predict(X_test) # Predict the labels for the training data X: y_pred
+#print the predictions
+print(\'Test set predictions:\\n {}\'.format(y_predict)) 
+knn.score(X_test,y_test) #to check out the accuracy of our model,we pass the X set and y set
+
+
+##Model complexity##
+#larger K=smoother decision boundary=less complex model
+#Smaller K=more complex model=can lead to overfitting
+#K get larger,the model is much more simpler than before. Overfitting & Underfitting
+
+##Example:##
+# Import necessary modules
+from sklearn import datasets
+import matplotlib.pyplot as plt
+#Load the digits dataset: digits
+digits = datasets.load_digits()
+# Print the keys and DESCR of the dataset
+print(digits.keys())
+print(digits.DESCR)
+# Print the shape of the images and data keys
+print(digits.images.shape)
+print(digits.data.shape)
+# Display digit 1010
+plt.imshow(digits.images[1010], cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
