@@ -1,0 +1,79 @@
+##Regression##--using boston housing dataset
+boston = pd.read_csv('boston.csv') #import the data
+#creating feature and target arrays
+X = boston.drop('MEDV', axis=1).values #'medv' is the medium value of owner occupied homes in thousand of dollars,we drop the target
+y = boston['MEDV'].values  #we only keep the target,use values attributes returns Numpy arrays as we use
+#predict house value from a single feature
+X_rooms = X[:,5]
+type(X_rooms), type(y)
+#reshape the values
+y = y.reshape(-1, 1)
+X_rooms = X_rooms.reshape(-1, 1)
+#Fit a regression model:
+import numpy as np
+from sklearn.linear_model import LinearRegression
+reg = LinearRegression()
+reg.fit(X_rooms, y) #fit the regressor with data
+prediction_space = np.linspace(min(X_rooms),   #we want to check out the regressors predictions over the range of data.
+                                    max(X_rooms)).reshape(-1, 1)  #linspace!
+
+#the basic of linear regression#
+#the loss/cost function#--we want to minimize the sum of squre(vertical distance between fit and data),it is called residual--OLS:ordinary least square
+#linear regression on all features#
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+    test_size = 0.3, random_state=42)
+reg_all = LinearRegression() #create the regressor
+reg_all.fit(X_train, y_train) #fit the model using training data
+y_pred = reg_all.predict(X_test)
+reg_all.score(X_test, y_test) #calculate the accuracy, the default method for linear regression is R^2.
+                              #but usually we do not use linear regression model, but we use regularization
+# Compute and print R^2 and RMSE
+print("R^2: {}".format(reg_all.score(X_test, y_test)))
+rrmse = np.sqrt(mean_squared_error(y_test,y_pred))
+print("Root Mean Squared Error: {}".format(rmse))
+
+#Cross validation#
+#motivation:
+#Basic intutation: 5-fold,the first split is testing data, the remaining four are training data;next we set the second row, the second column as testing data, the remaining is training data
+#similarily,(3,3),(4,4),(5,5) as test data,then we get 5 values of R-squared---'Five-Fold CV'...'K-Fold CV'. more fold, more computationally expensive
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LinearRegression
+reg = LinearRegression() #set the regressor
+cv_results = cross_val_score(reg, X, y, cv=5) #use cv to assign the k value
+print(cv_results)
+
+#Regularized Regression#
+#large coefficients can lead to overfitting,it choose a coefficient for each feature variable;To penalize large coefficient,we use regulation
+#Ridge regression=OLS+alpha*(sum of a^2).High alpha means large coefficient are significantly penalize,and lead to underfitting
+from sklearn.linear_model import Ridge
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state=42)
+ridge = Ridge(alpha=0.1, normalize=True)
+ridge.fit(X_train, y_train)
+ridge_pred = ridge.predict(X_test)
+ridge.score(X_test, y_test)
+
+#Lasso Regression#
+#loss function=OLS loss function+alpha*(sum|ai|);use to select important features(not shrunk to 0) of a dataset,shrink the coefficients of less important features to exactly 0
+from sklearn.linear_model import Lasso
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state=42)
+lasso = Lasso(alpha=0.1, normalize=True)
+lasso.fit(X_train, y_train)
+lasso_pred = lasso.predict(X_test)
+lasso.score(X_test, y_test)
+#Lasso for feature selection:
+#EG:# Import Lasso
+from sklearn.linear_model import Lasso
+# Instantiate a lasso regressor: lasso
+lasso = Lasso(alpha=0.4, normalize=True)
+# Fit the regressor to the data
+lasso.fit(X, y)
+# Compute and print the coefficients
+lasso_coef=lasso.fit(X, y).coef_
+print(lasso_coef)
+# Plot the coefficients
+plt.plot(range(len(df_columns)), lasso_coef)
+plt.xticks(range(len(df_columns)), df_columns.values, rotation=60)
+plt.margins(0.02)
+plt.show()
