@@ -31,7 +31,7 @@ reg_all.score(X_test, y_test) #calculate the accuracy, the default method for li
                               #but usually we do not use linear regression model, but we use regularization
 # Compute and print R^2 and RMSE
 print("R^2: {}".format(reg_all.score(X_test, y_test)))
-rrmse = np.sqrt(mean_squared_error(y_test,y_pred))
+rmse = np.sqrt(mean_squared_error(y_test,y_pred))
 print("Root Mean Squared Error: {}".format(rmse))
 
 #Cross validation#
