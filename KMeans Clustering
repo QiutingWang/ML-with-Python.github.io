@@ -1,0 +1,70 @@
+#common unsupervised learning methods:clustering,neutral network,anomaly detection
+#clustering methods:K-means,Hierarchical clustering,DBSCAN,guassian methods
+
+###K-Means Clustering###
+from sklearn.cluster import KMeans
+model = KMeans(n_clusters=3)
+model.fit(samples)
+labels = model.predict(samples)
+print(labels)
+
+##Cluster labels for new samples##
+#k-means are the mean of each cluster
+new_labels = model.predict(new_samples)
+print(new_labels)
+#Scatter plot
+import matplotlib.pyplot as plt
+xs = samples[:,0]
+ys = samples[:,2]
+plt.scatter(xs, ys, c=labels)
+plt.show()
+#Assign the columns of centroids: centroids_x, centroids_y
+centroids_x = centroids[:,0]
+centroids_y = centroids[:,2]
+# Make a scatter plot of centroids_x and centroids_y
+plt.scatter(centroids_x,centroids_y,marker='D',s=50)
+plt.show()
+
+##Evaluating a clustering--clusters and species
+#cross tabulation with pandas
+import pandas as pd
+df = pd.DataFrame({'labels': labels, 'species': species})
+print(df)                        #if the results show in the corresponding position,then it tells clusters correspond to species(判断标准）
+#crosstab of labels and species
+ct = pd.crosstab(df['labels'], df['species'])
+print(ct)
+
+#Clustering Quality:good clustering has tight clusters-->Inertia:measure how spread put the clusters are(lower the better)--Minimize the inertia
+#more clusters means lower inertia
+#A good clustering has tight clusters,but not too many clusters#--->Choose 'elbow',when the abs|slope| is not decreasing slow
+from sklearn.cluster import KMeans
+model = KMeans(n_clusters=3)
+model.fit(samples)  #using .fit_predict() is the same as using .fit() then .predict()
+print(model.inertia_)
+
+##Transforming features for better clustering##--using Piedmont Wine dataset
+#feature variance=feature influence
+#如果数据本身聚合状态不理想:StandardScaler()//Normalizer()
+#StandardScaler-->each feature distribution~(0,1)
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(samples)
+StandardScaler(copy=True, with_mean=True, with_std=True)
+samples_scaled = scaler.transform(samples)
+#Alternatively,use fit()/transform() with StandardScaler;use fit()/predict() with KMeans.Assign clusters label to samples and this done using predict method
+##Use Pipeline Method:StandardScaler+KMeans
+#create standardscaler and kmeans objects
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+scaler = StandardScaler()
+kmeans = KMeans(n_clusters=3)
+#import the make_pipeline function
+from sklearn.pipeline import make_pipeline
+pipeline = make_pipeline(scaler, kmeans)
+pipeline.fit(samples) #fit both scaler and kmean
+labels = pipeline.predict(samples)
+#EG:--Normalizer()
+#The Normalizer will separately transform each company's stock price to a relative scale before the clustering begins.
+#a NumPy array movements of daily price movements from 2010 to 2015 (obtained from Yahoo! Finance), where each row corresponds to a company, and each column corresponds to a trading day.
+from sklearn.preprocessing import Normalizer
+normalizer = Normalizer()   ......
