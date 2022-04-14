@@ -1,0 +1,89 @@
+####Feature Engineering####
+
+###Creating Features###
+##Why generating features##
+#Different type of data:continuous,categorical,ordinal:ranked values,boolean,datetime
+#how to convert them into a format that can be easily used for ML:Feature Extraction/Engineering messy data/Feature normalization/Working with text features
+#Examples:
+from builtins import EncodingWarning
+import pandas as pd
+df = pd.read_csv(path_to_csv_file)
+print(df.head())
+#dataset
+ SurveyDate \
+0    2018-02-28 20:20:00
+1    2018-06-28 13:26:00
+2    2018-06-06 03:37:00
+3    2018-05-09 01:06:00
+4    2018-04-12 22:41:00
+                              FormalEducation
+0    Bachelor's degree (BA. BS. B.Eng.. etc.)
+1    Bachelor's degree (BA. BS. B.Eng.. etc.)
+2    Bachelor's degree (BA. BS. B.Eng.. etc.)
+3    Some college/university study  ...
+4    Bachelor's degree (BA. BS. B.Eng.. etc.)
+#column name
+print(df.columns)
+Index(['SurveyDate', 'FormalEducation',
+       'ConvertedSalary', 'Hobby', 'Country',
+       'StackOverflowJobsRecommend', 'VersionControl',
+       'Age', 'Years Experience', 'Gender',
+       'RawSalary'], dtype='object')
+print(df.dtypes)
+#select special data types
+only_ints = df.select_dtypes(include=['int'])
+print(only_ints.columns)
+Index(['Age', 'Years Experience'], dtype='object')
+
+
+##Dealing with categorical features##
+#encoding categorical features:1.can not assign arbirary numbers to each category 2. values can be encoded by creating additional binary features,like dummy variable:whether the value was picked or not as shown in the table.(0 or 1)
+
+#Two ways to encoding:One-hot encoding,dummy encoding.use get_dummies() function-->one hot encoding
+#One-hot Encoding: convert n categories into n features as shown;Explainable features.
+pd.get_dummies(df, columns=['Country'],
+               prefix='C') #加前缀,can improve readability like letter C for country
+
+#Dummy Encoding:create n-1 features for n categories,omitting the first category;Necessary information without duplication.
+pd.get_dummies(df, columns=['Country'],
+               drop_first=True, prefix='C')
+
+#limit your columns,check the occurences of a column
+counts = df['Country'].value_counts()
+print(counts)
+#return
+'USA'      8
+'UK'       6
+'India'    2
+'France'   1
+Name: Country, dtype: object
+#after get the occurences of the columns:
+mask = df['Country'].isin(counts[counts < 5].index) # Create a mask for only categories that occur less than 5 times
+df['Country'][mask] = 'Other' # Label all other categories as Other
+print(pd.value_counts(colors))
+#return
+'USA'      8
+'UK'       6
+'Other'    3
+Name: Country, dtype: object
+
+
+##Numeric Variables##
+#types of numeric variables:age,price,counts,geospatial data
+#the size of numerical variables:whether the magnitude of the feature is the most important trait,or just its direction
+
+#Binarizing numeric variables:
+df['Binary_Violation'] = 0 #we create a new column and set it to zero
+df.loc[df['Number_of_Violations'] > 0,'Binary_Violation'] = 1 #只要出现了violation的case，binary那一列就是1
+
+#binning numeric variables:group a numeric variable grouped into more than two bins;the extract numbers are less relevant than the general magnitude of the value
+import numpy as np
+#create three groups
+df['Binned_Group'] = pd.cut(  #use .cut function to create bins
+    df['Number_of_Violations'],
+    bins=[-np.inf, 0, 2, np.inf], #we define the intervals(0,1,2)，在公式中0，2表达的是从0到2
+    labels=[1, 2, 3])
+#another example for creating five equal bins:
+# Bin the continuous variable ConvertedSalary into 5 bins
+so_survey_df['equal_binned'] = pd.cut(so_survey_df['ConvertedSalary'], 5)
+
