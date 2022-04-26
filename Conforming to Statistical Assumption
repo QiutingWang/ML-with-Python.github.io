@@ -1,0 +1,74 @@
+###Conforming to Statistical Assumption###
+
+##Data Distribution##manipulate data for fitting the distribution, or at least fit as closely as possible
+#almost all models besides tree models assume the data is normally distributed
+#observe the data
+import matplotlib as plt
+df.hist()
+plt.show()
+#boxplot
+df[['column_1']].boxplot()
+plt.show()
+#how different features in the df interact with each other
+import seaborn as sns
+sns.pairplot(df)
+df.describe() #see the underlining features of your data
+#when don't we transform the data?for which of the following machine learning models is normalizing data not always necessary?--Decision Tree
+
+
+##Scaling and transformations## 3 ways
+#max-min scaling:suppose to find the outer boundary and squeezing everything within it
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler() #how should it scale values when it performs the transformation
+scaler.fit(df[['Age']]) #fit on your data
+df['normalized_age'] = scaler.transform(df[['Age']])
+
+#standardization:find the mean of the data and center your distribution,have no limit to maximum or minimum values
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(df[['Age']])
+df['standardized_col'] = scaler\.transform(df[['Age']])
+
+#log transformation:use to make highly skewed distributions less skewed
+from sklearn.preprocessing import PowerTransformer
+log = PowerTransformer()
+log.fit(df[['ConvertedSalary']])
+df['log_ConvertedSalary'] =log.transform(df[['ConvertedSalary']])
+
+##removing outliers## 2 methods
+#quantile based detection
+q_cutoff = df['col_name'].quantile(0.95) #cut the top 5%,regardless there exists outliers or not;set the threshold
+mask = df['col_name'] < q_cutoff
+trimmed_df = df[mask]
+
+#standard deviation based detection:usually 3 standard deviations from the mean
+mean = df['col_name'].mean()
+std = df['col_name'].std()
+cut_off = std * 3. #set the threshold
+lower, upper = mean - cut_off, mean + cut_off #set the upper bound and lower bound
+new_df = df[(df['col_name'] < upper) &
+                 (df['col_name'] > lower)]
+
+
+##scaling and transforming new data##train and test dataset
+#reuse training scaler
+scaler = StandardScaler()
+scaler.fit(train[['col']]) #scaler is only fitted and transformed in the training data;but only transformed in the test data
+train['scaled_col'] = scaler.transform(train[['col']])
+# FIT SOME MODEL
+# ....
+test = pd.read_csv('test_csv')
+test['scaled_col'] = scaler.transform(test[['col']])
+#training dataset for reuse,if we remove the outliers from test data
+train_mean = train[['col']].mean()
+train_std = train[['col']].std()
+cut_off = train_std * 3
+train_lower = train_mean - cut_off
+train_upper = train_mean + cut_off
+# Subset train data
+test = pd.read_csv('test_csv')
+# Subset test data
+test = test[(test[['col']] < train_upper) &
+              (test[['col']] > train_lower)]
+              
+#for avoid data leakage,we only use training data
