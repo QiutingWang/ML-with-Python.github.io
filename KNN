@@ -114,3 +114,6 @@ plt.show()
 #The solution to erase the disadvantages:
 1.standardize features
 2.pre-process of data:move the null and noises.
+
+#KD Tree#
+PANDASANG1231/Machine_learning_byHand/notebook/03.knn/kd_tree.ipynb
