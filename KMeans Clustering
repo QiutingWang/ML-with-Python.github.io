@@ -18,6 +18,7 @@ xs = samples[:,0]
 ys = samples[:,2]
 plt.scatter(xs, ys, c=labels)
 plt.show()
+
 #Assign the columns of centroids: centroids_x, centroids_y
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,2]
@@ -37,6 +38,7 @@ print(ct)
 #Clustering Quality:good clustering has tight clusters-->Inertia:measure how spread put the clusters are(lower the better)--Minimize the inertia
 #more clusters means lower inertia
 #A good clustering has tight clusters,but not too many clusters#--->Choose 'elbow',when the abs|slope| is not decreasing slow
+
 from sklearn.cluster import KMeans
 model = KMeans(n_clusters=3)
 model.fit(samples)  #using .fit_predict() is the same as using .fit() then .predict()
@@ -52,6 +54,7 @@ scaler.fit(samples)
 StandardScaler(copy=True, with_mean=True, with_std=True)
 samples_scaled = scaler.transform(samples)
 #Alternatively,use fit()/transform() with StandardScaler;use fit()/predict() with KMeans.Assign clusters label to samples and this done using predict method
+
 ##Use Pipeline Method:StandardScaler+KMeans
 #create standardscaler and kmeans objects
 from sklearn.preprocessing import StandardScaler
@@ -63,8 +66,18 @@ from sklearn.pipeline import make_pipeline
 pipeline = make_pipeline(scaler, kmeans)
 pipeline.fit(samples) #fit both scaler and kmean
 labels = pipeline.predict(samples)
+
 #EG:--Normalizer()
 #The Normalizer will separately transform each company's stock price to a relative scale before the clustering begins.
 #a NumPy array movements of daily price movements from 2010 to 2015 (obtained from Yahoo! Finance), where each row corresponds to a company, and each column corresponds to a trading day.
 from sklearn.preprocessing import Normalizer
 normalizer = Normalizer()   ......
+
+##How to get a proper K value##
+1.Based on experience choose k points in the dataset, then we calculate randomly for n times, choose the Ki value in [1,2,..,n] has best performance
+2.Get the relationship between K value and SSE. Normally, SSE get smaller when K become larger. Pay attention to the change of the slope, if the abs(slope) is large then at some point abs(slope) becomes small, then we choose the corresponding K value as the final one.
+3.Gap Statistic:
+-No need for manually judgment. 
+-Formula:Gap(K)=E(LogDk)-log(Dk)
+-When Gap value is largest, we get the corresponding K value as the final one.
+
