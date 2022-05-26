@@ -1,5 +1,5 @@
-##machine learning with python##
-##KNN-Clustering##
+##KNN-Clustering##Supervised learning method
+
 from sklearn import datasetname
 import pandas as pd
 import numpy as np
@@ -12,13 +12,14 @@ type(iris)
 X=iris.data
 Y=iris.target
 df=pd.DataFrame(X,columns=iris.feature_names)
-#visual our dataset:
+
+#visual our dataset:(data visualization with pandas)
 _=pd.plotting.scatter_matrix(df,c=y,figsize=[8,8],s=150,marker='D') #c is the target variable of color;figsize:declare the size of the figure,
 #as well as a marker size and shape-->then, the result is the matrix of figure,corresponding to the row and column.
 
 ##The Challenge of Classification##
 #KNN:K-Nearest Nighbors#--predict the label of any data point by looking at K.Using the scatter point;create a set of decision boundries 
-#通俗来讲，划分区域，然后通过区域来判断categories
+#通俗来讲，划分区域，然后通过区域来判断categories,少数服从多数。
 #training the model for data is to fitting a model to data,store the imforation learned from data-- using .fit() method to do this
 #To predict the labels of new data: .predict() method
 
@@ -45,11 +46,11 @@ print('Prediction:{}'.format(prediction))
 # Import KNeighborsClassifier from sklearn.neighbors
 from sklearn.neighbors import KNeighborsClassifier 
 
-# Create arrays for the features and the response variable
+#Create arrays for the features and the response variable
 y = df['party'].values
 X = df.drop('party', axis=1).values
 
-# Create a k-NN classifier with 6 neighbors: knn
+#Create a k-NN classifier with 6 neighbors: knn
 knn = KNeighborsClassifier(n_neighbors=6)
 
 # Fit the classifier to the data
@@ -64,14 +65,17 @@ print("Prediction: {}".format(new_prediction))
 
 #Measuring model performance:
 #Accuracy=Fraction of correct predictions; split the data into 2 sets:training and testing set:Fit-->Train;Prediction based on test set
+
 from sklearn.model_selection import train_test_split #import the package
 X_train,X_test,y_train,y_test=      #use the train test split function to randomly split your data
 train_test_split(X,y,test_size=0.3,   #X: the first argument is the feature data, y:the second argument is targets or labels
                  random_state=21,stratify=y)  #test_size is the proportion of original data is used for the dataset
 #random_state set a seed for random number generator that splits the data into train and test,the seed will later allow you to reproduce the exact split and the result
 #it will finally return four arrays as the declaration
+
 ##By default, train test split splits data into 75% training data and 25% test data##
 #but here, we set the test data is 30% of total data
+
 knn = KNeighborsClassifier(n_neighbors=8) #fit to the training data
 knn.fit(X_train,y_train)
 y_pred=knn.predict(X_test) # Predict the labels for the training data X: y_pred
@@ -80,15 +84,16 @@ print(\'Test set predictions:\\n {}\'.format(y_predict))
 knn.score(X_test,y_test) #to check out the accuracy of our model,we pass the X set and y set
 
 
-##Model complexity##
-#larger K=smoother decision boundary=less complex model
-#Smaller K=more complex model=can lead to overfitting
+##Model complexity##一般选取较小的K值，K:测试样本点周围的K个临近点
+#larger K=smoother decision boundary=less complex model容易使预测发生错误
+#Smaller K=more complex model 训练误差越小，在较小领域内训练实例进行预测，学习的估计误差会增大，容易过拟合
 #K get larger,the model is much more simpler than before. Overfitting & Underfitting
 
 ##Example:##
 # Import necessary modules
 from sklearn import datasets
 import matplotlib.pyplot as plt
+
 #Load the digits dataset: digits
 digits = datasets.load_digits()
 # Print the keys and DESCR of the dataset
@@ -100,3 +105,12 @@ print(digits.data.shape)
 # Display digit 1010
 plt.imshow(digits.images[1010], cmap=plt.cm.gray_r, interpolation='nearest')
 plt.show()
+
+##Disadvantage of KNN##
+#1.large amount of computation
+#2.imbalance sample
+#3.require a lot of memory space
+
+#The solution to erase the disadvantages:
+1.standardize features
+2.pre-process of data:move the null and noises.
