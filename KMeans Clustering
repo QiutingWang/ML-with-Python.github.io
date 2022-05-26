@@ -76,7 +76,9 @@ normalizer = Normalizer()   ......
 ##How to get a proper K value##
 1.Based on experience choose k points in the dataset, then we calculate randomly for n times, choose the Ki value in [1,2,..,n] has best performance
 2.Get the relationship between K value and SSE. Normally, SSE get smaller when K become larger. Pay attention to the change of the slope, if the abs(slope) is large then at some point abs(slope) becomes small, then we choose the corresponding K value as the final one.
-3.Gap Statistic:
+3.Gap Statistic:  For detail:Mavengence/Pattern_Analysis_SS20_FAU/Exercise_6.ipynb
+https://github.com/Mavengence/Pattern_Analysis_SS20_FAU/blob/a6c134cc7781f1a30b28c271752e60fe2e5b969b/Exercise_6.ipynb
+
 -No need for manually judgment. 
 -Formula:Gap(K)=E(LogDk)-log(Dk)
 -When Gap value is largest, we get the corresponding K value as the final one.
