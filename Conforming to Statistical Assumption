@@ -18,12 +18,16 @@ df.describe() #see the underlining features of your data
 
 ##Scaling and transformations## 3 ways
 #max-min scaling:suppose to find the outer boundary and squeezing everything within it
+#最小最大缩放将特征值缩小到 0 到 1 的范围
+#For Normalization,X_norm=(X-X_min)/(X_max-X_min)
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler() #how should it scale values when it performs the transformation
 scaler.fit(df[['Age']]) #fit on your data
 df['normalized_age'] = scaler.transform(df[['Age']])
 
 #standardization:find the mean of the data and center your distribution,have no limit to maximum or minimum values
+#将特征值转换至服从标准正态分布
+#Formula:x'=(x-x_bar)/S
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 scaler.fit(df[['Age']])
