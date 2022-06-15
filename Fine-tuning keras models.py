@@ -8,8 +8,9 @@ def get_new_model(input_shape = input_shape):
     model = Sequential()
     model.add(Dense(100, activation='relu', input_shape = input_shape))
     model.add(Dense(100, activation='relu'))
-    model.add(Dense(2, activation='softmax'))
+    model.add(Dense(2, activation='softmax'))#用于任务分类，对于（0，1）的vector进行加权、归一化，使sum=1，考虑范围内所有值https://medium.com/artificialis/softmax-function-and-misconception-4248917e5a1c
     return(model)
+#其他激活函数：relu/leaky relu/sigmoid
 lr_to_test = [.000001, 0.01, 1]
 # loop over learning rates
 for lr in lr_to_test:
@@ -216,6 +217,7 @@ Epoch 9/10
 89648/89648 [=====] - 5s - loss: 0.6564 - acc: 0.6147 - val_loss: 0.6568 - val_acc: 0.6110
 Epoch 10/10
 89648/89648 [=====] - 5s - loss: 0.6555 - acc: 0.6158 - val_loss: 0.6557 - val_acc: 0.6126
+                
 #early stopping: stop training when the valiation score isn't improving
 from keras.callbacks import EarlyStopping
 early_stopping_monitor = EarlyStopping(patience=2) #the model can go without improving before we stop training
