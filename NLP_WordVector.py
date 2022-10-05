@@ -1,7 +1,7 @@
 #introduction and word vectors#
 
 #Computer thinks of meaning# wordnet:a thesaurus containing lists of synonym sets and hypernyms.A great resource of NLP
-https://wordnet.princeton.edu/
+#https://wordnet.princeton.edu/
 #synonym sets containing "good" 同义词,words mean the same things
 !pip install nltk
 from nltk.corpus import wordnet as wn  # wordnet:a thesaurus containing lists of synonym sets and hypernyms 
