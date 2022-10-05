@@ -1,9 +1,9 @@
 ###optimize  classification and regression models using hyperparameter turning###
 
 ##diagnosing classifaction predictions--Confusion Matix## For binary classification
-                     Predicted Spam Email                     Predicted Real Email
-Actual:Spam Email    True Positive 阳性                        False Negative 假阴性
-Actual:Real Email    False Positive  假阳性                     True Negative 阴性
+                     #Predicted Spam Email                     Predicted Real Email
+#Actual:Spam Email    True Positive 阳性                        False Negative 假阴性
+#Actual:Real Email    False Positive  假阳性                     True Negative 阴性
 
 #Accuracy from the confusion matrix:=(TP+TN)/(TP+TN+FP+FN)
 #Precision:=TP/(TP+FP), positive predictive value(PPV); High precision means that not many real emails predicted as spam
